@@ -1,38 +1,121 @@
-# SteamStorefrontAPI
-[![nuget](https://img.shields.io/nuget/v/SteamStorefrontAPI.svg)](https://www.nuget.org/packages/SteamStorefrontAPI)
+# Steam Storefront API - Python
 
-The SteamStorefrontAPI is a .NET wrapper for the steam storefront api which is exposed via Steam Big Picture. The API is not officially available or documented, all data in this library was either compiled by trial and error from the [inofficial api documentation](https://wiki.teamfortress.com/wiki/User:RJackson/StorefrontAPI), and is therefore provided as-is.
+A Python wrapper for Steam's unofficial storefront API, ported from the original .NET library by mmuffins.
 
-## Usage examples
+## Features
 
-```cs
-using SteamStorefrontAPI;
-using SteamStorefrontAPI.Classes;
+- Get detailed information about Steam apps
+- Get detailed information about Steam packages  
+- Retrieve featured games and categories
+- Support for different regions/countries
+- Async/await support with aiohttp
+- Type hints and dataclasses for better development experience
+- Compatibility layer matching the original .NET API
 
-static async Task Examples()
-{
-    // Get details for SteamApp with ID 443790
-    SteamApp steamApp1 = await AppDetails.GetAsync(460810);
+## Installation
 
-    // Get details for SteamApp with ID 443790 for region US
-    SteamApp steamApp2 = await AppDetails.GetAsync(322330, "US");
+```bash
+pip install steam-storefront-api
 
-    // Get details for Package with ID 68179 for region
-    PackageInfo package1 = await PackageDetails.GetAsync(68179);
+## Usage
 
-    // Get details for Package with ID 68179 for region JP
-    PackageInfo package2 = await PackageDetails.GetAsync(68179, "JP");
+### Basic Usage
 
-    // Get a list of featured games
-    FeaturedApps featured = await Featured.GetAsync();
+python
+import asyncio
+from steam_storefront_api import SteamStorefrontAPI
 
-    // Get a list of featured games for region DE
-    FeaturedApps featured2 = await Featured.GetAsync("DE");
+async def main():
+    async with SteamStorefrontAPI() as api:
+    # Get app details
+    app = await api.get_app_details(460810)
+    print(f"App: {app.name}")
+    print(f"Price: {app.price_overview.final_formatted if app.price_overview else 'Free'}")
+        
+    # Get package details
+    package = await api.get_package_details(68179)
+    print(f"Package: {package.name}")
+        
+    # Get featured apps
+    featured = await api.get_featured_apps()
+    print(f"Large capsules: {len(featured.large_capsules)}")
 
-    // Get a list of featured games grouped by category
-    List<FeaturedCategory> featuredCategories = await FeaturedCategories.GetAsync();
+asyncio.run(main())
 
-    // Get a list of featured games grouped by category for region US
-    List<FeaturedCategory> featuredCategories2 = await FeaturedCategories.GetAsync("DE");
-}
-```
+### Compatibility Layer
+
+For those familiar with the original .NET API:
+
+python
+import asyncio
+from steam_storefront_api import AppDetails, PackageDetails, Featured, FeaturedCategories
+
+async def main():
+    # Get details for SteamApp with ID 460810
+    steam_app1 = await AppDetails.get_async(460810)
+    
+    # Get details for SteamApp with ID 322330 for region US
+    steam_app2 = await AppDetails.get_async(322330, "US")
+    
+    # Get details for Package with ID 68179
+    package1 = await PackageDetails.get_async(68179)
+    
+    # Get a list of featured games
+    featured = await Featured.get_async()
+    
+    # Get featured categories
+    featured_categories = await FeaturedCategories.get_async()
+
+asyncio.run(main())
+
+## API Reference
+
+### Classes
+
+- `SteamStorefrontAPI`: Main API client class
+- `SteamApp`: Represents a Steam application with detailed information
+- `PackageInfo`: Represents a Steam package
+- `FeaturedApps`: Contains featured apps data
+- `FeaturedCategory`: Represents a category of featured apps
+- `PriceInfo`: Contains pricing information
+
+### Methods
+
+- `get_app_details(app_id, country=None)`: Get detailed app information
+- `get_package_details(package_id, country=None)`: Get detailed package information  
+- `get_featured_apps(country=None)`: Get featured apps
+- `get_featured_categories(country=None)`: Get featured categories
+
+## Requirements
+
+- Python 3.7+
+- aiohttp 3.8.0+
+
+## License
+
+This project is licensed under the MIT License.
+
+## Disclaimer
+
+This library uses Steam's unofficial storefront API. The API is not officially documented and may change without notice. Use at your own risk.
+
+
+This Python library provides equivalent functionality to the original .NET SteamStorefrontAPI with the following improvements:
+
+1. **Async/await support**: Uses aiohttp for non-blocking HTTP requests
+2. **Type hints**: Full type annotations for better IDE support
+3. **Dataclasses**: Clean, structured data representation
+4. **Error handling**: Specific exceptions for different error cases
+5. **Regional support**: Easy country/region specification
+6. **Compatibility layer**: Maintains similar API to the original .NET library
+7. **Modern Python practices**: Follows current Python conventions
+
+The library handles all the same functionality as the original:
+- App details retrieval
+- Package details retrieval  
+- Featured apps and categories
+- Regional variants
+- Price information parsing
+- Screenshots, movies, and metadata
+
+You can use it either with the modern async context manager approach or the compatibility layer that matches the original .NET API style.
