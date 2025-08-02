@@ -12,15 +12,9 @@ A Python wrapper for Steam's unofficial storefront API, ported from the original
 - Type hints and dataclasses for better development experience
 - Compatibility layer matching the original .NET API
 
-## Installation
-
-```bash
-pip install steam-storefront-api
-
-## Usage
-
 ### Basic Usage
 
+```python
 python
 import asyncio
 from steam_storefront_api import SteamStorefrontAPI
@@ -41,11 +35,11 @@ async def main():
     print(f"Large capsules: {len(featured.large_capsules)}")
 
 asyncio.run(main())
-
+```
 ### Compatibility Layer
 
 For those familiar with the original .NET API:
-
+```python
 python
 import asyncio
 from steam_storefront_api import AppDetails, PackageDetails, Featured, FeaturedCategories
@@ -67,7 +61,7 @@ async def main():
     featured_categories = await FeaturedCategories.get_async()
 
 asyncio.run(main())
-
+```
 ## API Reference
 
 ### Classes
